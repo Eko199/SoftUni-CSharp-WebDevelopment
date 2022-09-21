@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace _01.Ranking
+namespace _08.Ranking
 {
     internal class Program
     {
