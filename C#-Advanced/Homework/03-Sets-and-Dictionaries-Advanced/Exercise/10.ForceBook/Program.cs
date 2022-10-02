@@ -25,7 +25,7 @@ namespace _10.ForceBook
                     forceSides.ToList().ForEach(side => side.Value.Remove(tokens[1]));
                 }
 
-                if (!forceSides.Select(side => side.Value.Contains(tokens[1])).Contains(true))
+                if (!forceSides.Any(side => side.Value.Contains(tokens[1])))
                 {
                     if (!forceSides.ContainsKey(tokens[0]))
                         forceSides.Add(tokens[0], new SortedSet<string>());
