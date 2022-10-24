@@ -5,15 +5,17 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListyIterator", "ListyIterator\ListyIterator.csproj", "{142D5723-8914-4226-84C3-2CD3841F39FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stack", "Stack\Stack.csproj", "{66A1A54D-C4A4-4960-9334-22F869D8ECCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stack", "Stack\Stack.csproj", "{66A1A54D-C4A4-4960-9334-22F869D8ECCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Froggy", "Froggy\Froggy.csproj", "{A94F9808-D915-40CB-82C6-BCECCB54C41E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Froggy", "Froggy\Froggy.csproj", "{A94F9808-D915-40CB-82C6-BCECCB54C41E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComparingObjects", "ComparingObjects\ComparingObjects.csproj", "{2FD07ED3-6E2E-4BFA-BE53-3F15132E569A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComparingObjects", "ComparingObjects\ComparingObjects.csproj", "{2FD07ED3-6E2E-4BFA-BE53-3F15132E569A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomComparator", "CustomComparator\CustomComparator.csproj", "{AD3D79A5-68A4-44D4-AA0A-89F46EC6D556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomComparator", "CustomComparator\CustomComparator.csproj", "{AD3D79A5-68A4-44D4-AA0A-89F46EC6D556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EqualityLogic", "EqualityLogic\EqualityLogic.csproj", "{B6B70A76-7CF9-4087-80FE-B2EA4CAAFC27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EqualityLogic", "EqualityLogic\EqualityLogic.csproj", "{B6B70A76-7CF9-4087-80FE-B2EA4CAAFC27}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImplementingLinkedList", "..\..\08-Generics\Exercise\ImplementingLinkedList\ImplementingLinkedList.csproj", "{89267A4F-30CA-4CD6-A22A-808C43DE3A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{B6B70A76-7CF9-4087-80FE-B2EA4CAAFC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6B70A76-7CF9-4087-80FE-B2EA4CAAFC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6B70A76-7CF9-4087-80FE-B2EA4CAAFC27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89267A4F-30CA-4CD6-A22A-808C43DE3A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89267A4F-30CA-4CD6-A22A-808C43DE3A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89267A4F-30CA-4CD6-A22A-808C43DE3A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89267A4F-30CA-4CD6-A22A-808C43DE3A2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

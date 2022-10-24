@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace CustomDoublyLinkedList
 {
-    internal class DoublyLinkedList<T> : IEnumerable<T>
+    internal class DoublyLinkedList<T>
     {
         private class ListNode
         {
@@ -89,8 +87,12 @@ namespace CustomDoublyLinkedList
 
         public void ForEach(Action<T> action)
         {
-            foreach (T element in this)
-                action(element);
+            ListNode currentNode = head;
+            while (currentNode != null)
+            {
+                action(currentNode.Value);
+                currentNode = currentNode.NextNode;
+            }
         }
 
         public T[] ToArray()
@@ -102,18 +104,5 @@ namespace CustomDoublyLinkedList
 
             return arr;
         }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            ListNode currentNode = head;
-            while (currentNode != null)
-            {
-                yield return currentNode.Value;
-                currentNode = currentNode.NextNode;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() 
-            => GetEnumerator();
     }
 }
