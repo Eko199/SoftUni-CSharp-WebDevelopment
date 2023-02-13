@@ -49,7 +49,7 @@ SELECT DepositGroup,
 	MIN(DepositCharge) AS MinDepositCharge
 FROM WizzardDeposits
 GROUP BY DepositGroup, MagicWandCreator
-ORDER BY DepositGroup, MagicWandCreator;
+ORDER BY MagicWandCreator, DepositGroup;
 
 --09.
 SELECT AgeGroup, COUNT(*) AS WizardCount
@@ -66,7 +66,7 @@ FROM (
 		END AS AgeGroup
 	FROM WizzardDeposits
 ) AS AgeGroupSubquery
-GROUP BY AgeGroup
+GROUP BY AgeGroup;
 
 --10.
 SELECT LEFT(FirstName, 1) AS FirstLetter
@@ -138,7 +138,9 @@ FROM Employees
 WHERE ManagerID IS NULL;
 
 --18.
-SELECT DepartmentID, Salary AS ThirdHighestSalary
+SELECT DISTINCT 
+	DepartmentID
+	, Salary AS ThirdHighestSalary
 FROM (
 	SELECT DepartmentID,
 		Salary,
