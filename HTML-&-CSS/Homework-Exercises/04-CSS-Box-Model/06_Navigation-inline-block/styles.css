@@ -1,0 +1,30 @@
+html {
+    font-family: Helvetica, sans-serif;
+}
+
+header {
+    border-bottom: 2px solid gray;
+}
+
+header > h1 {
+    display: inline-block;
+}
+
+nav {
+    display: inline-block;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 1.5em;
+}
+
+nav li a {
+    color: green;
+    text-decoration: none;
+}
+
+main h1 {
+    font-weight: normal;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}

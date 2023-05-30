@@ -1,0 +1,29 @@
+html {
+    font-family: Helvetica, sans-serif;
+    color: rgb(51, 51, 51);
+}
+
+h1, h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body {
+    background-color: rgb(238, 238, 238);
+    margin-left: 40px;
+}
+
+article {
+    width: 70%;
+    display: inline-block;
+}
+
+img {
+    width: 75%;
+    height: auto;
+}
+
+aside {
+    width: 25%;
+    display: inline-block;
+    vertical-align: top;
+}
