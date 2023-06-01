@@ -1,0 +1,29 @@
+body {
+    margin: 7em;
+}
+
+body, ul, li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    background-color: lightgray;
+}
+
+ul {
+    justify-content: space-between;
+}
+
+ul li {
+    align-items: center;
+    width: 22%;
+    height: auto;
+    padding: 1em;
+    border: 10px solid black;
+    background-color: white;
+    box-shadow: 0 0 15px black;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}

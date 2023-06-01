@@ -1,0 +1,36 @@
+html {
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.container, .week, .notes {
+    display: flex;
+    justify-content: stretch;
+    align-content: stretch;
+}
+
+.container {
+    max-width: 65vw;
+    height: 600px;
+}
+
+.week {
+    flex-basis: 80%;
+    flex-wrap: wrap;
+}
+
+.week :nth-child(1), .week :nth-child(7) {
+    flex-basis: 100%;
+}
+
+.notes {
+    flex-basis: 20%;
+    flex-direction: column;
+}
+
+span {
+    border: 1px solid black;
+    flex-grow: 1;
+    text-align: center;
+    padding: 1em;
+}

@@ -1,0 +1,35 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 4em;
+}
+
+header {
+    border-bottom: 2px solid rgb(0,0,0);
+    display: flex;
+    justify-content: space-between;
+}
+
+header h1 {
+    text-transform: uppercase;
+}
+
+header ul {
+    display: flex;
+    gap: 1em;
+    list-style: none;
+    align-items: stretch;
+}
+
+nav a {
+    color: rgb(0, 153, 0);
+    text-decoration: none;
+    padding: 1em;
+}
+
+main h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: normal;
+}
