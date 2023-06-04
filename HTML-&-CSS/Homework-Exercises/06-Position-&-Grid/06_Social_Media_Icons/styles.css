@@ -1,0 +1,36 @@
+ul {
+    display: inline-block;
+    list-style: none;
+}
+
+ul li {
+    display: inline-block;
+}
+
+ul a {
+    color: black;
+    border-radius: 50%;
+    background-color: rgb(238, 238, 238);
+    padding: 0.7em;
+    margin: 0.2em;
+}
+
+ul li:nth-child(1):hover a {
+    color: rgb(0, 30, 220);
+}
+
+ul li:nth-child(2):hover a {
+    color: rgb(0, 145, 255);
+}
+
+ul li:nth-child(3):hover a {
+    color: red;
+}
+
+ul li:nth-child(4):hover a {
+    color: rgb(0, 100, 200);
+}
+
+ul li:nth-child(5):hover a {
+    color: rgb(153, 210, 228);
+}
