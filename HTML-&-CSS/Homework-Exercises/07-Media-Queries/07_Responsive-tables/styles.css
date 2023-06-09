@@ -1,0 +1,45 @@
+body {
+    padding: 1em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+    width: 100%;
+    font-weight: bold;
+}
+
+thead {
+    background-color: black;
+    color: white;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgb(235, 235, 235);
+}
+
+th, td {
+    width: 33%;
+    padding: 0.2em 0.5em;
+    border: 1px solid rgb(192, 192, 192);
+    border-collapse: collapse;
+}
+
+@media screen and (max-width: 600px) {
+    thead {
+        visibility: hidden;
+        height: 0;
+        position: absolute;
+    }
+    
+    td {
+        width: 100%;
+        display: block;
+        font-weight: normal;
+    }
+    
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        padding-right: 1em;
+    }
+}

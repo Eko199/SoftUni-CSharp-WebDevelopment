@@ -1,0 +1,67 @@
+@import url('https://use.fontawesome.com/releases/v6.2.1/css/all.css');
+
+html {
+    font-family: serif;
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+h6 {
+    font-size: 1.1rem;
+}
+
+.foot-contacts>ul>li:nth-child(n) {
+    font-weight: 700;
+}
+.foot-contacts{
+    line-height: 1.7;
+}
+
+footer {
+    font-size: 100%;
+}
+
+header nav,
+.intro,
+.team.person.name,
+.team.person.desc,
+p.testimonials.person,
+h4,h6,footer {
+    font-weight: bold;
+}
+
+.team.person.title {
+    font-size: smaller;
+}
+
+article p,
+header nav,
+section.intro.container>div.intro.text>p,
+section.footer-logo > article > p,
+footer p, footer li,footer a
+ {
+    font-family: sans-serif;
+}
+
+.sign-up {
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+
+header nav {
+    font-size: 18px;
+}
+
+p.testimonials.person,
+p.testimonials.subtitle,
+p.team.person.name,
+p.team.person.title{
+    line-height: 50%;
+}
