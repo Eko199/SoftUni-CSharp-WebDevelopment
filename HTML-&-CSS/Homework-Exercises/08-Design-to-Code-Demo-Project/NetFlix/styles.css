@@ -1,0 +1,201 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+    position: relative;
+    padding: 1em 3em;
+    background-image: url("assets/bg.jpg");
+    background-size: 110% 110%;
+    min-height: 30em;
+    text-align: center;
+    z-index: 1;
+}
+
+header::before {
+    position: absolute;
+    content: '';
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6em;
+}
+
+.banner img {
+    height: 2.5em;
+    width: auto;
+}
+
+button, input[type="submit"] {
+    background-color: red;
+    color: white;
+    padding: 0.5em 1em;
+    border: none;
+    transition: background-color 0.1s ease-in;
+    cursor: pointer;
+}
+
+.banner button {
+    border-radius: 0.3em;
+    font-size: 0.7em;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: rgb(185, 0, 0);
+}
+
+header .content {
+    margin: 0 9em;
+}
+
+header h1 {
+    font-size: 2.6em;
+    margin-bottom: 0.2em;
+}
+
+header h2 {
+    font-size: 1.3em;
+    font-weight: normal;
+    margin-bottom: 0.8em;
+}
+
+header p {
+    font-size: 0.8em;
+    line-height: 2.2;
+}
+
+form {
+    display: flex;
+    width: 100%;
+    max-width: 50em;
+    height: 3em;
+    justify-content: stretch;
+    margin: 0.4em auto;
+}
+
+form input[type="email"] {
+    flex: 1 1 60%;
+    padding: 0 0.5em;
+}
+
+form input[type="submit"] {
+    flex: 1 1 40%;
+    font-size: 1.2em;
+}
+
+main section {
+    padding: 3em 8em;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    border-top: 2px solid rgba(128, 128, 128, 0.334);
+    border-bottom: 2px solid rgba(128, 128, 128, 0.334);
+}
+
+main section h1 {
+    font-size: 1.9em;
+    margin-bottom: 0.5em;
+}
+
+main section .content {
+    flex: 4 1 70%;
+}
+
+main section img {
+    max-width: 20em;
+    flex: 1 1 30%;
+}
+
+main section.FAQ {
+    flex-direction: column;
+    padding: 3em 12em;
+    gap: 0;
+}
+
+main section.FAQ ul {
+    max-width: 50em;
+    align-self: stretch;
+    list-style: none;
+    margin: 1em 0;
+}
+
+@media screen and (min-width: 1000px) {
+    main section.FAQ ul {
+        align-self: center;
+        width: 60%;
+        min-width: 40em;
+    }
+}
+
+main section.FAQ li {
+    position: relative;
+    background-color: rgba(128, 128, 128, 0.334);
+    margin: 0 0 0.4em 0;
+    padding: 0.8em 1em;
+    transition: background-color 0.1s ease-in;
+    cursor: pointer;
+}
+
+main section.FAQ li:hover {
+    background-color: rgba(97, 97, 97, 0.334);
+}
+
+main section.FAQ li svg {
+    position: absolute;
+    font-size: 2em;
+    right: 0.4em;
+    bottom: 0.2em;
+    fill: white;
+}
+
+main section.FAQ p {
+    font-size: 0.7em;
+    margin: 0.8em 0;
+}
+
+footer {
+    border-top: 2px solid rgba(128, 128, 128, 0.334);
+    padding: 3em 10em;
+}
+
+footer h1, footer p, footer ul a {
+    font-size: 0.6em;
+    color: gray;
+}
+
+footer h1, footer ul {
+    margin-bottom: 1.5em;
+}
+
+footer ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 2em;
+}
+
+footer ul li {
+    flex: 0 1 17%;
+}
+
+footer ul a {
+    text-decoration: none;
+}
