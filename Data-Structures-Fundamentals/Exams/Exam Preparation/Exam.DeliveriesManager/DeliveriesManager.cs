@@ -9,7 +9,8 @@ namespace Exam.DeliveriesManager
     public class DeliveriesManager : IDeliveriesManager
     {
         private readonly Dictionary<string, List<string>> delivererPackages = new Dictionary<string, List<string>>();
-        private readonly BinarySearchTree<Package> packages = new BinarySearchTree<Package>(new PackageWeightReceiverComparer());
+        //private readonly BinarySearchTree<Package> packages = new BinarySearchTree<Package>(new PackageWeightReceiverComparer());
+        private readonly Dictionary<string, Package> packages = new Dictionary<string, Package>();
         private readonly Dictionary<string, Deliverer> deliverers = new Dictionary<string, Deliverer>();
 
         public void AddDeliverer(Deliverer deliverer)
@@ -18,7 +19,8 @@ namespace Exam.DeliveriesManager
             delivererPackages.Add(deliverer.Id, new List<string>());
         }
 
-        public void AddPackage(Package package) => packages.Insert(package);
+        //public void AddPackage(Package package) => packages.Insert(package);
+        public void AddPackage(Package package) => packages[package.Id] = package;
 
         public void AssignPackage(Deliverer deliverer, Package package)
         {
@@ -30,7 +32,8 @@ namespace Exam.DeliveriesManager
 
         public bool Contains(Deliverer deliverer) => deliverers.ContainsKey(deliverer.Id);
 
-        public bool Contains(Package package) => packages.Contains(package);
+        //public bool Contains(Package package) => packages.Contains(package);
+        public bool Contains(Package package) => packages.ContainsKey(package.Id);
 
         public IEnumerable<Deliverer> GetDeliverers() => deliverers.Values;
 
@@ -39,14 +42,19 @@ namespace Exam.DeliveriesManager
                 .OrderByDescending(d => delivererPackages[d.Id].Count)
                 .ThenBy(d => d.Name);
 
-        public IEnumerable<Package> GetPackages()
-        {
-            var result = new List<Package>();
-            packages.EachInOrder(result.Add);
-            return result;
-        }
+        //public IEnumerable<Package> GetPackages()
+        //{
+        //    var result = new List<Package>();
+        //    packages.EachInOrder(result.Add);
+        //    return result;
+        //}
+        public IEnumerable<Package> GetPackages() => packages.Values;
 
-        public IEnumerable<Package> GetPackagesOrderedByWeightThenByReceiver() => GetPackages();
+        //public IEnumerable<Package> GetPackagesOrderedByWeightThenByReceiver() => GetPackages();
+        public IEnumerable<Package> GetPackagesOrderedByWeightThenByReceiver() 
+            => packages.Values
+            .OrderByDescending(p => p.Weight)
+                .ThenBy(p => p.Receiver);
 
         public IEnumerable<Package> GetUnassignedPackages()
             => GetPackages().Where(p => !delivererPackages.Values.SelectMany(l => l).Contains(p.Id));

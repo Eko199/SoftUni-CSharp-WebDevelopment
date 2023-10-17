@@ -38,6 +38,9 @@
             if (y is null)
                 return 1;
 
+            if (x.Id == y.Id) 
+                return 0;
+
             return x.Weight.CompareTo(y.Weight) != 0 
                 ? y.Weight.CompareTo(x.Weight) 
                 : string.Compare(x.Receiver, y.Receiver, StringComparison.Ordinal);

@@ -8,7 +8,8 @@ namespace Exam.DeliveriesManager
 
     public class AirlinesManager : IAirlinesManager
     {
-        private readonly BinarySearchTree<Flight> flights = new BinarySearchTree<Flight>(new FlightCompletionNumberComparer());
+        //private readonly BinarySearchTree<Flight> flights = new BinarySearchTree<Flight>(new FlightCompletionNumberComparer());
+        private readonly Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
         private readonly Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
         private readonly Dictionary<string, HashSet<string>> airlinesFlights = new Dictionary<string, HashSet<string>>();
 
@@ -23,13 +24,15 @@ namespace Exam.DeliveriesManager
             if (!Contains(airline))
                 throw new ArgumentException();
 
-            flights.Insert(flight);
+            //flights.Insert(flight);
+            flights[flight.Id] = flight;
             airlinesFlights[airline.Id].Add(flight.Id);
         }
 
         public bool Contains(Airline airline) => airlines.ContainsKey(airline.Id);
 
-        public bool Contains(Flight flight) => flights.Contains(flight);
+        //public bool Contains(Flight flight) => flights.Contains(flight);
+        public bool Contains(Flight flight) => flights.ContainsKey(flight.Id);
 
         public void DeleteAirline(Airline airline)
         {
@@ -38,7 +41,8 @@ namespace Exam.DeliveriesManager
 
             foreach (string flightId in airlinesFlights[airline.Id])
             {
-                flights.Delete(new Flight(flightId, "", "", "", false));
+                //flights.Delete(new Flight(flightId, "", "", "", false));
+                flights.Remove(flightId);
             }
 
             airlinesFlights.Remove(airline.Id);
@@ -60,16 +64,21 @@ namespace Exam.DeliveriesManager
             return airlines.Keys.Where(k => airlinesFlights[k].Intersect(flightsFromTo).Any()).Select(k => airlines[k]);
         }
 
-        public IEnumerable<Flight> GetAllFlights()
-        {
-            var result = new List<Flight>();
-            flights.EachInOrder(result.Add);
-            return result;
-        }
+        //public IEnumerable<Flight> GetAllFlights()
+        //{
+        //    var result = new List<Flight>();
+        //    flights.EachInOrder(result.Add);
+        //    return result;
+        //}
+        public IEnumerable<Flight> GetAllFlights() => flights.Values;
 
         public IEnumerable<Flight> GetCompletedFlights() => GetAllFlights().Where(f => f.IsCompleted);
 
-        public IEnumerable<Flight> GetFlightsOrderedByCompletionThenByNumber() => GetAllFlights();
+        //public IEnumerable<Flight> GetFlightsOrderedByCompletionThenByNumber() => GetAllFlights();
+        public IEnumerable<Flight> GetFlightsOrderedByCompletionThenByNumber() 
+            => GetAllFlights()
+                .OrderBy(f => f.IsCompleted)
+                .ThenBy(f => f.Number);
 
         public Flight PerformFlight(Airline airline, Flight flight)
         {
