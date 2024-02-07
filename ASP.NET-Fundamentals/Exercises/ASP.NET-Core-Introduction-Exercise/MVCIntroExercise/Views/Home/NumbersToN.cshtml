@@ -1,0 +1,17 @@
+﻿@model int
+@{
+    ViewData["Title"] = $"Nums 1 ... {Model}";
+}
+
+<h2>@ViewBag.Title</h2>
+<ul>
+    @for (int i = 1; i <= Model; ++i)
+    {
+        <li>@i</li>
+    }
+</ul>
+
+<form action="NumbersToN" method="get">
+    <input name="count" value="@Model" />
+    <button type="submit">Submit</button>
+</form>
