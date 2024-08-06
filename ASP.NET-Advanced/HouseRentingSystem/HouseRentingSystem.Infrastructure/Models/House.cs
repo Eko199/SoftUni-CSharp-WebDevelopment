@@ -24,7 +24,8 @@ public class House
     public string ImageUrl { get; set; } = string.Empty;
 
     [Required]
-    [Range(MinPricePerMonth, MaxPricePerMonth)]
+    [Column(TypeName = "decimal(6,2)")]
+    [Range(typeof(decimal), MinPricePerMonth, MaxPricePerMonth, ConvertValueInInvariantCulture = true)]
     public decimal PricePerMonth { get; set; }
 
     [Required]

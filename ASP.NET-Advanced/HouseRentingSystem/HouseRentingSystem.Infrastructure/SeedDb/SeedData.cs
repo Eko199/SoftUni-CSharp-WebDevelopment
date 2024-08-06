@@ -1,42 +1,35 @@
-﻿namespace HouseRentingSystem.Infrastructure;
+﻿namespace HouseRentingSystem.Infrastructure.SeedDb;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Models;
-using SeedDb;
 
-public class HouseRentingDbContext : IdentityDbContext
+internal class SeedData
 {
-    public HouseRentingDbContext(DbContextOptions<HouseRentingDbContext> options)
-        : base(options)
-    { }
+    public SeedData()
+    {
+        SeedUsers();
+        SeedAgent();
+        SeedCategories();
+        SeedHouses();
+    }
 
-    public DbSet<House> Houses { get; set; } = null!;
+    public IdentityUser AgentUser { get; set; } = null!;
 
-    public DbSet<Category> Categories { get; set; } = null!;
+    public IdentityUser GuestUser { get; set; } = null!;
 
-    public DbSet<Agent> Agents { get; set; } = null!;
+    public Agent Agent { get; set; } = null!;
 
-    //Seed:
+    public Category CottageCategory { get; set; } = null!;
 
-    private IdentityUser AgentUser { get; set; } = null!;
+    public Category SingleCategory { get; set; } = null!;
 
-    private IdentityUser GuestUser { get; set; } = null!;
+    public Category DuplexCategory { get; set; } = null!;
 
-    private Agent Agent { get; set; } = null!;
+    public House FirstHouse { get; set; } = null!;
 
-    private Category CottageCategory { get; set; } = null!;
+    public House SecondHouse { get; set; } = null!;
 
-    private Category SingleCategory { get; set; } = null!;
-
-    private Category DuplexCategory { get; set; } = null!;
-
-    private House FirstHouse { get; set; } = null!;
-
-    private House SecondHouse { get; set; } = null!;
-
-    private House ThirdHouse { get; set; } = null!;
+    public House ThirdHouse { get; set; } = null!;
 
     private void SeedUsers()
     {
@@ -136,15 +129,5 @@ public class HouseRentingDbContext : IdentityDbContext
             CategoryId = SingleCategory.Id,
             AgentId = Agent.Id
         };
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.ApplyConfiguration(new UserConfiguration());
-        builder.ApplyConfiguration(new AgentConfiguration());
-        builder.ApplyConfiguration(new CategoryConfiguration());
-        builder.ApplyConfiguration(new HouseConfiguration());
-
-        base.OnModelCreating(builder);
     }
 }

@@ -18,8 +18,8 @@ public static class DataConstants
         public const int DescriptionMinLength = 50;
         public const int DescriptionMaxLength = 500;
 
-        public const double MinPricePerMonth = 0;
-        public const double MaxPricePerMonth = 2000;
+        public const string MinPricePerMonth = "0.00";
+        public const string MaxPricePerMonth = "2000.00";
     }
 
     public static class Agent
