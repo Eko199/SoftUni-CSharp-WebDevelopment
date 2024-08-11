@@ -25,7 +25,6 @@ public class House
 
     [Required]
     [Column(TypeName = "decimal(6,2)")]
-    [Range(typeof(decimal), MinPricePerMonth, MaxPricePerMonth, ConvertValueInInvariantCulture = true)]
     public decimal PricePerMonth { get; set; }
 
     [Required]
