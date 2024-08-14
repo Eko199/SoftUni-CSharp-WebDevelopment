@@ -1,7 +1,7 @@
 ﻿namespace HouseRentingSystem.Core.Services.House;
 
 using Contracts.House;
-using Infrastructure;
+using Infrastructure.Common;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Models.Agent;
@@ -9,15 +9,15 @@ using Models.House;
 
 public class HouseService : IHouseService
 {
-    private readonly HouseRentingDbContext data;
+    private readonly IRepository data;
 
-    public HouseService(HouseRentingDbContext data)
+    public HouseService(IRepository data)
     {
         this.data = data;
     }
 
     public async Task<IEnumerable<HouseIndexServiceModel>> GetLastThreeHousesAsync()
-        => await data.Houses
+        => await data.All<House>()
             .OrderByDescending(h => h.Id)
             .Select(h => new HouseIndexServiceModel
             {
@@ -29,7 +29,7 @@ public class HouseService : IHouseService
             .ToListAsync();
 
     public async Task<IEnumerable<HouseCategoryServiceModel>> GetAllCategoriesAsync()
-        => await data.Categories
+        => await data.All<Category>()
             .Select(c => new HouseCategoryServiceModel
             {
                 Id = c.Id,
@@ -37,10 +37,10 @@ public class HouseService : IHouseService
             }).ToListAsync();
 
     public async Task<IEnumerable<string>> GetAllCategoriesNamesAsync()
-        => await data.Categories.Select(c => c.Name).Distinct().ToListAsync();
+        => await data.All<Category>().Select(c => c.Name).Distinct().ToListAsync();
 
     public async Task<bool> CategoryExistsAsync(int id)
-        => await data.Categories.AnyAsync(c => c.Id == id);
+        => await data.All<Category>().AnyAsync(c => c.Id == id);
 
     public async Task<int> Create(HouseFormModel model, int agentId)
     {
@@ -55,7 +55,7 @@ public class HouseService : IHouseService
             AgentId = agentId
         };
 
-        await data.Houses.AddAsync(house);
+        await data.AddAsync(house);
         await data.SaveChangesAsync();
 
         return house.Id;
@@ -63,7 +63,7 @@ public class HouseService : IHouseService
 
     public async Task<AllHousesQueryModel> GetAllAsync(AllHousesQueryModel model)
     {
-        IQueryable<House> query = data.Houses.AsQueryable();
+        IQueryable<House> query = data.All<House>();
 
         if (!string.IsNullOrWhiteSpace(model.Category))
         {
@@ -96,18 +96,18 @@ public class HouseService : IHouseService
 
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByAgentIdAsync(int agentId)
         => await ProjectToHouseServiceModel(data
-                .Houses
+                .All<House>()
                 .Where(h => h.AgentId == agentId))
             .ToListAsync();
 
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByUserIdAsync(string userId)
         => await ProjectToHouseServiceModel(data
-                .Houses
+                .All<House>()
                 .Where(h => h.RenterId == userId))
             .ToListAsync();
 
     public async Task<HouseDetailsServiceModel?> GetDetailsByIdAsync(int id)
-        => await data.Houses
+        => await data.All<House>()
             .Select(h => new HouseDetailsServiceModel
             {
                 Id = h.Id,
@@ -130,7 +130,7 @@ public class HouseService : IHouseService
     {
         var categories = await GetAllCategoriesAsync();
 
-        return await data.Houses
+        return await data.All<House>()
             .Where(h => h.Id == id)
             .Select(h => new HouseFormModel
             {
@@ -147,7 +147,7 @@ public class HouseService : IHouseService
 
     public async Task EditAsync(int id, HouseFormModel model)
     {
-        House house = await data.Houses.FindAsync(id)
+        House house = await data.FindAsync<House, int>(id)
             ?? throw new ArgumentException("Invalid house id!");
 
         house.Title = model.Title;
@@ -162,36 +162,36 @@ public class HouseService : IHouseService
 
     public async Task<bool> HouseHasAgentWithUserId(int houseId, string userId)
     {
-        int? agentId = (await data.Agents.SingleOrDefaultAsync(a => a.UserId == userId))?.Id;
+        int? agentId = (await data.All<Agent>().SingleOrDefaultAsync(a => a.UserId == userId))?.Id;
 
         if (!agentId.HasValue)
         {
             return false;
         }
 
-        House? house = await data.Houses.FindAsync(houseId);
+        House? house = await data.FindAsync<House, int>(houseId);
         return house != null && house.AgentId == agentId;
     }
 
-    public async Task<bool> ExistsByIdAsync(int id) => await data.Houses.AnyAsync(h => h.Id == id);
+    public async Task<bool> ExistsByIdAsync(int id) => await data.All<House>().AnyAsync(h => h.Id == id);
 
     public async Task DeleteAsync(int id)
     {
-        var house = await data.Houses.FindAsync(id) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House, int>(id) ?? throw new ArgumentException("Invalid house id!");
 
-        data.Houses.Remove(house);
+        data.Delete(house);
         await data.SaveChangesAsync();
     }
 
     public async Task<bool> IsRentedByUserWithIdAsync(int houseId, string userId)
     {
-        var house = await data.Houses.FindAsync(houseId);
+        var house = await data.FindAsync<House, int>(houseId);
         return house != null && house.RenterId == userId;
     }
 
     public async Task RentAsync(int houseId, string userId)
     {
-        var house = await data.Houses.FindAsync(houseId) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House, int>(houseId) ?? throw new ArgumentException("Invalid house id!");
 
         if (house.RenterId != null)
         {
@@ -204,7 +204,7 @@ public class HouseService : IHouseService
 
     public async Task LeaveAsync(int houseId)
     {
-        var house = await data.Houses.FindAsync(houseId) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House, int>(houseId) ?? throw new ArgumentException("Invalid house id!");
         house.RenterId = null;
         await data.SaveChangesAsync();
     }

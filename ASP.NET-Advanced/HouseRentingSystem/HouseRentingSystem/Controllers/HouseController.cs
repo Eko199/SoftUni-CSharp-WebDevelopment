@@ -1,14 +1,14 @@
 ﻿namespace HouseRentingSystem.Controllers;
 
 using System.Security.Claims;
+using Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.House;
 using Core.Services.Contracts.Agent;
 using Core.Services.Contracts.House;
 
-[Authorize]
-public class HouseController : Controller
+public class HouseController : BaseController
 {
     private readonly IHouseService houseService;
     private readonly IAgentService agentService;
@@ -50,13 +50,9 @@ public class HouseController : Controller
     }
 
     [HttpGet]
+    [IsAgent]
     public async Task<IActionResult> Add()
     {
-        if (!await agentService.ExistsByIdAsync(User.Id()!))
-        {
-            return RedirectToAction(nameof(AgentController.Become), "Agent");
-        }
-
         var model = new HouseFormModel
         {
             Categories = await houseService.GetAllCategoriesAsync()
@@ -66,15 +62,9 @@ public class HouseController : Controller
     }
 
     [HttpPost]
+    [IsAgent]
     public async Task<IActionResult> Add(HouseFormModel model)
     {
-        string userId = User.Id()!;
-
-        if (!await agentService.ExistsByIdAsync(userId))
-        {
-            return RedirectToAction(nameof(AgentController.Become), "Agent");
-        }
-
         if (!await houseService.CategoryExistsAsync(model.CategoryId))
         {
             ModelState.AddModelError(nameof(model.CategoryId), "Category does not exist.");
@@ -86,7 +76,7 @@ public class HouseController : Controller
             return View(model);
         }
 
-        int agentId = (await agentService.GetAgentIdAsync(userId))!.Value;
+        int agentId = (await agentService.GetAgentIdAsync(User.Id()!))!.Value;
         int newHouseId = await houseService.Create(model, agentId);
 
         return RedirectToAction(nameof(Details), new { id = newHouseId });

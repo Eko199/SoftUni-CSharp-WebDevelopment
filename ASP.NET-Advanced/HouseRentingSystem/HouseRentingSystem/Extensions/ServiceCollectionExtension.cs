@@ -7,6 +7,7 @@ using HouseRentingSystem.Core.Services.Contracts.Agent;
 using HouseRentingSystem.Core.Services.Contracts.House;
 using HouseRentingSystem.Core.Services.House;
 using HouseRentingSystem.Infrastructure;
+using HouseRentingSystem.Infrastructure.Common;
 
 public static class ServiceCollectionExtension
 {
@@ -24,6 +25,9 @@ public static class ServiceCollectionExtension
                                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         services.AddDbContext<HouseRentingDbContext>(options =>
             options.UseSqlServer(connectionString));
+
+        services.AddScoped<IRepository, Repository>();
+
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         return services;

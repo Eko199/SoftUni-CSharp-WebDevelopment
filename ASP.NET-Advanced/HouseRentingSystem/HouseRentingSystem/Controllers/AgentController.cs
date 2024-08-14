@@ -1,13 +1,13 @@
 ﻿namespace HouseRentingSystem.Controllers;
 
 using System.Security.Claims;
+using Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Core.Models.Agent;
 using Core.Services.Contracts.Agent;
 
-[Authorize]
-public class AgentController : Controller
+public class AgentController : BaseController
 {
     private readonly IAgentService agentService;
 
@@ -17,25 +17,14 @@ public class AgentController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Become()
-    {
-        if (await agentService.ExistsByIdAsync(User.Id()!))
-        {
-            return BadRequest();
-        }
-
-        return View(new BecomeAgentFormModel());
-    }
+    [NotAnAgent]
+    public IActionResult Become() => View(new BecomeAgentFormModel());
 
     [HttpPost]
+    [NotAnAgent]
     public async Task<IActionResult> Become(BecomeAgentFormModel agent)
     {
         var userId = User.Id()!;
-
-        if (await agentService.ExistsByIdAsync(userId))
-        {
-            return BadRequest();
-        }
 
         if (await agentService.UserWithPhoneNumberExistsAsync(agent.PhoneNumber))
         {
