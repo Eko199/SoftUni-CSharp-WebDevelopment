@@ -1,4 +1,6 @@
-﻿@model IEnumerable<HouseIndexServiceModel>
+﻿@using System.Security.Claims
+@model IEnumerable<HouseIndexServiceModel>
+@inject IAgentService Agents
 
 @{
     ViewData["Title"] = "Home Page";
@@ -15,7 +17,7 @@
         </p>
         <hr class="my-4">
         <p class="lead">
-            @if (User.Identity?.IsAuthenticated == true)
+            @if (User.Identity?.IsAuthenticated == true && await Agents.ExistsByIdAsync(User.Id()!))
             {
                 <a asp-controller="House" asp-action="Add" class="btn btn-primary btn-lg"
                    role="button">Add House</a>
@@ -37,7 +39,7 @@
                 <div class="carousel-caption d-none d-md-block">
                     <h5>
                         <a class="btn btn-primary" asp-controller="House" asp-action="Details"
-                           asp-route-id="@house.Id"> @house.Title</a>
+                           asp-route-id="@house.Id" asp-route-information="@house.GetInformation()"> @house.Title</a>
                     </h5>
                 </div>
             </div>
@@ -52,3 +54,32 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<div class="mb-5"></div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary" id="statistics-button">Show Statistics</button>
+    </div>
+</div>
+
+<div class="mt-4 p-5 bg-light d-none" id="statistics">
+    <div class="row">
+        <h2 class="col-md-6 text-center" id="total-houses"></h2>
+        <h2 class="col-md-6 text-center" id="total-rents"></h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("statistics-button")
+            .addEventListener("click", async function (e) {
+                const data = await (await fetch("/api/statistic")).json();
+
+                document.getElementById("total-houses").innerText = data.totalHouses + " Houses";
+                document.getElementById("total-rents").innerText = data.totalRents + " Rents";
+                document.getElementById("statistics").classList.remove("d-none");
+                document.getElementById("statistics-button").hidden = true;
+            });
+    </script>
+}

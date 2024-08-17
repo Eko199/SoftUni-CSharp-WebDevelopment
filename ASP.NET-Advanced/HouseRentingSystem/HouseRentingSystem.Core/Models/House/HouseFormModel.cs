@@ -3,16 +3,8 @@
 using System.ComponentModel.DataAnnotations;
 using static Infrastructure.DataConstants.House;
 
-public class HouseFormModel
+public class HouseFormModel : HouseModel
 {
-    [Required]
-    [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
-    public string Title { get; set; } = string.Empty;
-
-    [Required]
-    [StringLength(AddressMaxLength, MinimumLength = AddressMinLength)]
-    public string Address { get; set; } = string.Empty;
-
     [Required]
     [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
     public string Description { get; set; } = string.Empty;

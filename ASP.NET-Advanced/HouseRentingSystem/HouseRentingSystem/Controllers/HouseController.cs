@@ -8,17 +8,8 @@ using Core.Models.House;
 using Core.Services.Contracts.Agent;
 using Core.Services.Contracts.House;
 
-public class HouseController : BaseController
+public class HouseController(IHouseService houseService, IAgentService agentService) : BaseController
 {
-    private readonly IHouseService houseService;
-    private readonly IAgentService agentService;
-
-    public HouseController(IHouseService houseService, IAgentService agentService)
-    {
-        this.houseService = houseService;
-        this.agentService = agentService;
-    }
-
     [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> All([FromQuery] AllHousesQueryModel model)
@@ -43,10 +34,16 @@ public class HouseController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> Details(int id)
+    public async Task<IActionResult> Details(int id, string information)
     {
         HouseDetailsServiceModel? house = await houseService.GetDetailsByIdAsync(id);
-        return house is null ? BadRequest() : View(house);
+
+        if (house is null || information != house.GetInformation())
+        {
+            return BadRequest();
+        }
+
+        return View(house);
     }
 
     [HttpGet]
@@ -79,7 +76,7 @@ public class HouseController : BaseController
         int agentId = (await agentService.GetAgentIdAsync(User.Id()!))!.Value;
         int newHouseId = await houseService.Create(model, agentId);
 
-        return RedirectToAction(nameof(Details), new { id = newHouseId });
+        return RedirectToAction(nameof(Details), new { id = newHouseId, information = model.GetInformation() });
     }
 
     [HttpGet]
@@ -125,7 +122,7 @@ public class HouseController : BaseController
         }
 
         await houseService.EditAsync(id, house);
-        return RedirectToAction(nameof(Details), new { id });
+        return RedirectToAction(nameof(Details), new { id, information = house.GetInformation() });
     }
 
     [HttpGet]
@@ -147,7 +144,7 @@ public class HouseController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(HouseShortInfoViewModel house)
+    public async Task<IActionResult> Delete(HouseIndexServiceModel house)
     {
         if (!await houseService.ExistsByIdAsync(house.Id))
         {

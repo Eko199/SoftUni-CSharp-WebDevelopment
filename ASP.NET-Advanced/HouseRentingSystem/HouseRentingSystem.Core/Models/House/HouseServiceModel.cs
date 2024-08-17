@@ -2,7 +2,7 @@
 
 using System.ComponentModel;
 
-public class HouseServiceModel : HouseShortInfoViewModel
+public class HouseServiceModel : HouseIndexServiceModel
 {
     [DisplayName("Price Per Month")]
     public decimal PricePerMonth { get; set; }

@@ -2,10 +2,10 @@
 
 using AspNetCore.Identity;
 using EntityFrameworkCore;
-using HouseRentingSystem.Core.Services.Agent;
+using HouseRentingSystem.Core.Services;
 using HouseRentingSystem.Core.Services.Contracts.Agent;
 using HouseRentingSystem.Core.Services.Contracts.House;
-using HouseRentingSystem.Core.Services.House;
+using HouseRentingSystem.Core.Services.Contracts.Statistic;
 using HouseRentingSystem.Infrastructure;
 using HouseRentingSystem.Infrastructure.Common;
 
@@ -15,6 +15,7 @@ public static class ServiceCollectionExtension
     {
         services.AddTransient<IHouseService, HouseService>();
         services.AddTransient<IAgentService, AgentService>();
+        services.AddTransient<IStatisticService, StatisticService>();
 
         return services;
     }

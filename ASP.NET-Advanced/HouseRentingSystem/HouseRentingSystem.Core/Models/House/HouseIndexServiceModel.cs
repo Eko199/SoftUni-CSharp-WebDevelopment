@@ -1,10 +1,11 @@
-﻿namespace HouseRentingSystem.Core.Models.House;
+﻿using System.ComponentModel;
 
-public class HouseIndexServiceModel
+namespace HouseRentingSystem.Core.Models.House;
+
+public class HouseIndexServiceModel : HouseModel
 {
     public int Id { get; set; }
 
-    public string Title { get; set; } = string.Empty;
-
+    [DisplayName("Image URL")]
     public string ImageUrl { get; set; } = string.Empty;
 }

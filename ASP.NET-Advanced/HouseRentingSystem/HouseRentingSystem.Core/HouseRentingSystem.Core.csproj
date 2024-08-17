@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Statistic\" />
     <Folder Include="Services\Contracts\House\" />
     <Folder Include="Services\Contracts\Agent\" />
   </ItemGroup>
