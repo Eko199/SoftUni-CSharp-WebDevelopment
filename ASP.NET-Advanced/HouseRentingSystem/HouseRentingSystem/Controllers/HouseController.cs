@@ -89,7 +89,7 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
             return BadRequest();
         }
 
-        if (!await houseService.HouseHasAgentWithUserId(id, User.Id()!))
+        if (!User.IsAdmin() && !await houseService.HouseHasAgentWithUserId(id, User.Id()!))
         {
             return Unauthorized();
         }
@@ -105,7 +105,7 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
             return BadRequest();
         }
 
-        if (!await houseService.HouseHasAgentWithUserId(id, User.Id()!))
+        if (!User.IsAdmin() && !await houseService.HouseHasAgentWithUserId(id, User.Id()!))
         {
             return Unauthorized();
         }
@@ -135,7 +135,7 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
             return BadRequest();
         }
 
-        if (!await houseService.HouseHasAgentWithUserId(id, User.Id()!))
+        if (!User.IsAdmin() && !await houseService.HouseHasAgentWithUserId(id, User.Id()!))
         {
             return Unauthorized();
         }
@@ -151,7 +151,7 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
             return BadRequest();
         }
 
-        if (!await houseService.HouseHasAgentWithUserId(house.Id, User.Id()!))
+        if (!User.IsAdmin() && !await houseService.HouseHasAgentWithUserId(house.Id, User.Id()!))
         {
             return Unauthorized();
         }
@@ -170,7 +170,7 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
             return BadRequest();
         }
 
-        if (await agentService.ExistsByIdAsync(User.Id()!))
+        if (!User.IsAdmin() && await agentService.ExistsByIdAsync(User.Id()!))
         {
             return Unauthorized();
         }

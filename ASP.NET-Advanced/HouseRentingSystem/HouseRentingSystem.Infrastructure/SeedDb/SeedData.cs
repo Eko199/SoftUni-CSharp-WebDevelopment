@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Identity;
 using Models;
 
-internal class SeedData
+public class SeedData
 {
     public SeedData()
     {
@@ -13,11 +13,15 @@ internal class SeedData
         SeedHouses();
     }
 
-    public IdentityUser AgentUser { get; set; } = null!;
+    public ApplicationUser AgentUser { get; set; } = null!;
 
-    public IdentityUser GuestUser { get; set; } = null!;
+    public ApplicationUser GuestUser { get; set; } = null!;
+
+    public ApplicationUser AdminUser { get; set; } = null!;
 
     public Agent Agent { get; set; } = null!;
+
+    public Agent AdminAgent { get; set; } = null!;
 
     public Category CottageCategory { get; set; } = null!;
 
@@ -35,29 +39,45 @@ internal class SeedData
     {
         var hasher = new PasswordHasher<IdentityUser>();
 
-        AgentUser = new IdentityUser
+        AgentUser = new ApplicationUser
         {
             Id = "dea12856-c198-4129-b3f3-b893d8395082",
             UserName = "agent@mail.com",
             NormalizedUserName = "agent@mail.com",
             Email = "agent@mail.com",
-            NormalizedEmail = "agent@mail.com"
+            NormalizedEmail = "agent@mail.com",
+            FirstName = "Linda",
+            LastName = "Michaels"
         };
 
         AgentUser.PasswordHash = hasher.HashPassword(AgentUser, "agent123");
 
-        GuestUser = new IdentityUser
+        GuestUser = new ApplicationUser
         {
             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
             UserName = "guest@mail.com",
             NormalizedUserName = "guest@mail.com",
             Email = "guest@mail.com",
-            NormalizedEmail = "guest@mail.com"
+            NormalizedEmail = "guest@mail.com",
+            FirstName = "Teodor",
+            LastName = "Lesly"
         };
 
         GuestUser.PasswordHash =
             hasher.HashPassword(GuestUser, "guest123");
 
+        AdminUser = new ApplicationUser
+        {
+            Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
+            Email = "admin@mail.com",
+            NormalizedEmail = "admin@mail.com",
+            UserName = "admin@mail.com",
+            NormalizedUserName = "admin@mail.com",
+            FirstName = "Great",
+            LastName = "Admin"
+        };
+
+        AdminUser.PasswordHash = hasher.HashPassword(AgentUser, "admin123");
     }
 
     private void SeedAgent()
@@ -67,6 +87,13 @@ internal class SeedData
             Id = 1,
             PhoneNumber = "+359888888888",
             UserId = AgentUser.Id
+        };
+
+        AdminAgent = new Agent
+        {
+            Id = 5,
+            PhoneNumber = "+359123456789",
+            UserId = AdminUser.Id
         };
     }
 

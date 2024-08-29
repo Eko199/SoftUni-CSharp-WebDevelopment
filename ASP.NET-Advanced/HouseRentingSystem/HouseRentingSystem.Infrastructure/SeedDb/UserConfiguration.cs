@@ -1,14 +1,14 @@
 ﻿namespace HouseRentingSystem.Infrastructure.SeedDb;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Models;
 
-public class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
+public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<IdentityUser> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         var data = new SeedData();
-        builder.HasData(data.AgentUser, data.GuestUser);
+        builder.HasData(data.AgentUser, data.GuestUser, data.AdminUser);
     }
 }

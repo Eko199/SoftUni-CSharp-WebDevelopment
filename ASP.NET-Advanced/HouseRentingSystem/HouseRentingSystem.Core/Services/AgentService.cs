@@ -1,20 +1,13 @@
 ﻿namespace HouseRentingSystem.Core.Services;
 
+using Microsoft.EntityFrameworkCore;
 using Contracts.Agent;
-using HouseRentingSystem.Core.Models.Agent;
+using Models.Agent;
 using Infrastructure.Common;
 using Infrastructure.Models;
-using Microsoft.EntityFrameworkCore;
 
-public class AgentService : IAgentService
+public class AgentService(IRepository data) : IAgentService
 {
-    private readonly IRepository data;
-
-    public AgentService(IRepository data)
-    {
-        this.data = data;
-    }
-
     public async Task<bool> ExistsByIdAsync(string userId) => await data.All<Agent>().AnyAsync(a => a.UserId == userId);
 
     public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber) => await data.All<Agent>().AnyAsync(a => a.PhoneNumber == phoneNumber);

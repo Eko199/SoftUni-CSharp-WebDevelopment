@@ -27,4 +27,13 @@ public static class DataConstants
         public const int PhoneNumberMinLength = 7;
         public const int PhoneNumberMaxLength = 15;
     }
+
+    public static class ApplicationUser
+    {
+        public const int FirstNameMinLength = 1;
+        public const int FirstNameMaxLength = 12;
+
+        public const int LastNameMinLength = 3;
+        public const int LastNameMaxLength = 15;
+    }
 }

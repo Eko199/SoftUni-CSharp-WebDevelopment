@@ -1,34 +1,28 @@
 ﻿namespace HouseRentingSystem.Core.Services;
 
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Contracts.ApplicationUser;
 using Contracts.House;
 using Infrastructure.Common;
 using Infrastructure.Models;
-using Microsoft.EntityFrameworkCore;
 using Models.Agent;
 using Models.House;
 
-public class HouseService(IRepository data) : IHouseService
+public class HouseService(IRepository data, IApplicationUserService userService, IMapper mapper) : IHouseService
 {
     public async Task<IEnumerable<HouseIndexServiceModel>> GetLastThreeHousesAsync()
         => await data.All<House>()
             .OrderByDescending(h => h.Id)
-            .Select(h => new HouseIndexServiceModel
-            {
-                Id = h.Id,
-                Title = h.Title,
-                Address = h.Address,
-                ImageUrl = h.ImageUrl
-            })
+            .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .Take(3)
             .ToListAsync();
 
     public async Task<IEnumerable<HouseCategoryServiceModel>> GetAllCategoriesAsync()
         => await data.All<Category>()
-            .Select(c => new HouseCategoryServiceModel
-            {
-                Id = c.Id,
-                Name = c.Name
-            }).ToListAsync();
+            .ProjectTo<HouseCategoryServiceModel>(mapper.ConfigurationProvider)
+            .ToListAsync();
 
     public async Task<IEnumerable<string>> GetAllCategoriesNamesAsync()
         => await data.All<Category>().Select(c => c.Name).Distinct().ToListAsync();
@@ -80,24 +74,27 @@ public class HouseService(IRepository data) : IHouseService
             _ => query.OrderByDescending(h => h.Id)
         };
 
-        model.Houses = await ProjectToHouseServiceModel(query
+        model.Houses = await query
             .Skip((model.CurrentPage - 1) * AllHousesQueryModel.HousesPerPage)
-            .Take(AllHousesQueryModel.HousesPerPage))
+            .Take(AllHousesQueryModel.HousesPerPage)
+            .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
         return model;
     }
 
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByAgentIdAsync(int agentId)
-        => await ProjectToHouseServiceModel(data
-                .All<House>()
-                .Where(h => h.AgentId == agentId))
+        => await data
+            .All<House>()
+            .Where(h => h.AgentId == agentId)
+            .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByUserIdAsync(string userId)
-        => await ProjectToHouseServiceModel(data
-                .All<House>()
-                .Where(h => h.RenterId == userId))
+        => await data
+            .All<House>()
+            .Where(h => h.RenterId == userId)
+            .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
     public async Task<HouseDetailsServiceModel?> GetDetailsByIdAsync(int id)
@@ -114,6 +111,7 @@ public class HouseService(IRepository data) : IHouseService
                 Category = h.Category.Name,
                 Agent = new AgentServiceModel
                 {
+                    FullName = userService.GetFullNameAsync(h.Agent.UserId).Result,
                     PhoneNumber = h.Agent.PhoneNumber,
                     Email = h.Agent.User.Email!
                 }
@@ -141,7 +139,7 @@ public class HouseService(IRepository data) : IHouseService
 
     public async Task EditAsync(int id, HouseFormModel model)
     {
-        House house = await data.FindAsync<House, int>(id)
+        House house = await data.FindAsync<House>(id)
             ?? throw new ArgumentException("Invalid house id!");
 
         house.Title = model.Title;
@@ -163,7 +161,7 @@ public class HouseService(IRepository data) : IHouseService
             return false;
         }
 
-        House? house = await data.FindAsync<House, int>(houseId);
+        House? house = await data.FindAsync<House>(houseId);
         return house != null && house.AgentId == agentId;
     }
 
@@ -171,7 +169,7 @@ public class HouseService(IRepository data) : IHouseService
 
     public async Task DeleteAsync(int id)
     {
-        var house = await data.FindAsync<House, int>(id) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House>(id) ?? throw new ArgumentException("Invalid house id!");
 
         data.Delete(house);
         await data.SaveChangesAsync();
@@ -179,13 +177,13 @@ public class HouseService(IRepository data) : IHouseService
 
     public async Task<bool> IsRentedByUserWithIdAsync(int houseId, string userId)
     {
-        var house = await data.FindAsync<House, int>(houseId);
+        var house = await data.FindAsync<House>(houseId);
         return house != null && house.RenterId == userId;
     }
 
     public async Task RentAsync(int houseId, string userId)
     {
-        var house = await data.FindAsync<House, int>(houseId) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House>(houseId) ?? throw new ArgumentException("Invalid house id!");
 
         if (house.RenterId != null)
         {
@@ -198,19 +196,8 @@ public class HouseService(IRepository data) : IHouseService
 
     public async Task LeaveAsync(int houseId)
     {
-        var house = await data.FindAsync<House, int>(houseId) ?? throw new ArgumentException("Invalid house id!");
+        var house = await data.FindAsync<House>(houseId) ?? throw new ArgumentException("Invalid house id!");
         house.RenterId = null;
         await data.SaveChangesAsync();
     }
-
-    private static IQueryable<HouseServiceModel> ProjectToHouseServiceModel(IQueryable<House> query)
-        => query.Select(h => new HouseServiceModel
-        {
-            Id = h.Id,
-            Title = h.Title,
-            Address = h.Address,
-            ImageUrl = h.ImageUrl,
-            IsRented = h.RenterId != null,
-            PricePerMonth = h.PricePerMonth
-        });
 }

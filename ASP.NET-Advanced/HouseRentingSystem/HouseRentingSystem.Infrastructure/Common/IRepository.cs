@@ -10,5 +10,5 @@ public interface IRepository
 
     Task<int> SaveChangesAsync();
 
-    Task<TEntity?> FindAsync<TEntity, TId>(TId id) where TEntity : class;
+    Task<T?> FindAsync<T>(params object?[]? keyValues) where T : class;
 }

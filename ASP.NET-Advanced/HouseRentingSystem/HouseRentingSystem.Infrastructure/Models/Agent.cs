@@ -2,7 +2,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using static DataConstants.Agent;
 
@@ -19,5 +18,5 @@ public class Agent
     public string UserId { get; set; } = string.Empty;
 
     [ForeignKey(nameof(UserId))]
-    public IdentityUser User { get; set; } = null!;
+    public ApplicationUser User { get; set; } = null!;
 }

@@ -9,6 +9,6 @@ public class AgentConfiguration : IEntityTypeConfiguration<Agent>
     public void Configure(EntityTypeBuilder<Agent> builder)
     {
         var data = new SeedData();
-        builder.HasData(data.Agent);
+        builder.HasData(data.Agent, data.AdminAgent);
     }
 }
