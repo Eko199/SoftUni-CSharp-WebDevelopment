@@ -1,6 +1,7 @@
 ﻿namespace Microsoft.AspNetCore.Builder;
 
 using Identity;
+using static HouseRentingSystem.Common.Constants;
 using HouseRentingSystem.Infrastructure.Models;
 using HouseRentingSystem.Infrastructure.SeedDb;
 
@@ -14,21 +15,22 @@ public static class ApplicationBuilderExtensions
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        const string roleName = "Administrator";
-
-        if (await roleManager.RoleExistsAsync(roleName))
+        if (await roleManager.RoleExistsAsync(AdminRole))
         {
             return app;
         }
 
-        var role = new IdentityRole(roleName);
+        var role = new IdentityRole(AdminRole);
         await roleManager.CreateAsync(role);
 
         var seedData = new SeedData();
-        ApplicationUser admin = await userManager.FindByEmailAsync(seedData.AdminUser.Email!)
-                                ?? throw new ApplicationException("Admin doesn't exist!");
+        ApplicationUser? admin = await userManager.FindByEmailAsync(seedData.AdminUser.Email!);
 
-        await userManager.AddToRoleAsync(admin, roleName);
+        if (admin != null)
+        {
+            await userManager.AddToRoleAsync(admin, AdminRole);
+        }
+
         return app;
     }
 }

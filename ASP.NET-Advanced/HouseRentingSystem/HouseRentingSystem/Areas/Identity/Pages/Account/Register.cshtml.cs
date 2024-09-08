@@ -4,10 +4,12 @@
 namespace HouseRentingSystem.Areas.Identity.Pages.Account;
 
 using System.ComponentModel.DataAnnotations;
-using HouseRentingSystem.Infrastructure.Models;
+using System.Security.Claims;
+using Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Infrastructure.Models;
 using static Infrastructure.DataConstants.ApplicationUser;
 
 public class RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : PageModel
@@ -70,6 +72,7 @@ public class RegisterModel(UserManager<ApplicationUser> userManager, SignInManag
 
             if (result.Succeeded)
             {
+                await userManager.AddClaimAsync(user, new Claim(Constants.FullNameClaim, $"{user.FirstName} {user.LastName}"));
                 await signInManager.SignInAsync(user, isPersistent: false);
                 return LocalRedirect(returnUrl);
             }
