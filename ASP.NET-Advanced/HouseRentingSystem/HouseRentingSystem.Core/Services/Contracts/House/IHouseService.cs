@@ -12,7 +12,7 @@ public interface IHouseService
 
     Task<bool> CategoryExistsAsync(int id);
 
-    Task<int> Create(HouseFormModel model, int agentId);
+    Task<int> CreateAsync(HouseFormModel model, int agentId);
 
     Task<AllHousesQueryModel> GetAllAsync(AllHousesQueryModel model);
 
@@ -37,4 +37,8 @@ public interface IHouseService
     Task RentAsync(int houseId, string userId);
 
     Task LeaveAsync(int houseId);
+
+    Task<IEnumerable<HouseApprovalModel>> GetAllForApprovalAsync();
+
+    Task ApproveAsync(int houseId);
 }

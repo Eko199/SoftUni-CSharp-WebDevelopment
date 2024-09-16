@@ -6,6 +6,7 @@ using HouseRentingSystem.Core.Services;
 using HouseRentingSystem.Core.Services.Contracts.Agent;
 using HouseRentingSystem.Core.Services.Contracts.ApplicationUser;
 using HouseRentingSystem.Core.Services.Contracts.House;
+using HouseRentingSystem.Core.Services.Contracts.Rent;
 using HouseRentingSystem.Core.Services.Contracts.Statistic;
 using HouseRentingSystem.Infrastructure;
 using HouseRentingSystem.Infrastructure.Common;
@@ -19,6 +20,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAgentService, AgentService>();
         services.AddTransient<IStatisticService, StatisticService>();
         services.AddTransient<IApplicationUserService, ApplicationUserService>();
+        services.AddTransient<IRentService, RentService>();
 
         services.AddAutoMapper(typeof(IHouseService).Assembly);
 

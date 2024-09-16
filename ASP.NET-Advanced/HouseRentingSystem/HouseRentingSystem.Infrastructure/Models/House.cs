@@ -28,6 +28,9 @@ public class House
     public decimal PricePerMonth { get; set; }
 
     [Required]
+    public bool IsApproved { get; set; }
+
+    [Required]
     public int CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))]
@@ -40,4 +43,7 @@ public class House
     public Agent Agent { get; set; } = null!;
 
     public string? RenterId { get; set; }
+
+    [ForeignKey(nameof(RenterId))]
+    public ApplicationUser? Renter { get; set; }
 }

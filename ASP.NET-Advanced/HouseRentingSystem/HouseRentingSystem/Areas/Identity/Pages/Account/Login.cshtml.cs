@@ -60,11 +60,9 @@ public class LoginModel(SignInManager<ApplicationUser> signInManager) : PageMode
             {
                 return LocalRedirect(returnUrl);
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return Page();
-            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return Page();
         }
 
         // If we got this far, something failed, redisplay form

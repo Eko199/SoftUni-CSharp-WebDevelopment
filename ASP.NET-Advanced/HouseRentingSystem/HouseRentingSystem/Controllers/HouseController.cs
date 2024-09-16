@@ -1,14 +1,17 @@
 ﻿namespace HouseRentingSystem.Controllers;
 
 using System.Security.Claims;
-using Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Areas.Admin;
+using Attributes;
+using static Common.MessageConstants;
 using Core.Models.House;
 using Core.Services.Contracts.Agent;
 using Core.Services.Contracts.House;
 
-public class HouseController(IHouseService houseService, IAgentService agentService) : BaseController
+public class HouseController(IHouseService houseService, IAgentService agentService, IMemoryCache cache) : BaseController
 {
     [AllowAnonymous]
     [HttpGet]
@@ -23,6 +26,12 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
     [HttpGet]
     public async Task<IActionResult> Mine()
     {
+        if (User.IsAdmin())
+        {
+            return RedirectToAction(nameof(Areas.Admin.Controllers.HouseController.Mine), "House",
+                new { area = AdminConstants.AreaName });
+        }
+
         string userId = User.Id()!;
         int? agentId = await agentService.GetAgentIdAsync(userId);
 
@@ -74,9 +83,18 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
         }
 
         int agentId = (await agentService.GetAgentIdAsync(User.Id()!))!.Value;
-        int newHouseId = await houseService.Create(model, agentId);
+        int newHouseId = await houseService.CreateAsync(model, agentId);
 
-        return RedirectToAction(nameof(Details), new { id = newHouseId, information = model.GetInformation() });
+        if (User.IsAdmin())
+        {
+            await houseService.ApproveAsync(newHouseId);
+            TempData[SuccessMessage] = "You have successfully added a house!";
+
+            return RedirectToAction(nameof(Details), new { id = newHouseId, information = model.GetInformation() });
+        }
+
+        TempData[SuccessMessage] = "You have successfully sent a new house for approval!";
+        return RedirectToAction(nameof(All));
     }
 
     [HttpGet]
@@ -122,6 +140,8 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
         }
 
         await houseService.EditAsync(id, house);
+        TempData[SuccessMessage] = "You have successfully edited a house!";
+
         return RedirectToAction(nameof(Details), new { id, information = house.GetInformation() });
     }
 
@@ -157,6 +177,8 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
         }
 
         await houseService.DeleteAsync(house.Id);
+        TempData[SuccessMessage] = "You have successfully deleted a house!";
+
         return RedirectToAction(nameof(All));
     }
 
@@ -176,6 +198,9 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
         }
 
         await houseService.RentAsync(id, User.Id()!);
+        cache.Remove(AdminConstants.RentsCacheKey);
+        TempData[SuccessMessage] = "You have successfully rented a house!";
+
         return RedirectToAction(nameof(Mine));
     }
 
@@ -195,6 +220,9 @@ public class HouseController(IHouseService houseService, IAgentService agentServ
         }
 
         await houseService.LeaveAsync(id);
+        cache.Remove(AdminConstants.RentsCacheKey);
+        TempData[SuccessMessage] = "You have successfully left a house!";
+
         return RedirectToAction(nameof(Mine));
     }
 }

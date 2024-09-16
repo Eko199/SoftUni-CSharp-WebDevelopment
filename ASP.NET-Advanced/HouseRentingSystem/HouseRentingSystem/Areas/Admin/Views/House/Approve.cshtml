@@ -1,0 +1,20 @@
+﻿@model IEnumerable<HouseApprovalModel>
+
+@{
+    ViewBag.Title = "Houses for approval";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">You have no houses to approve!</h2>
+}
+
+<div class="row">
+    @foreach (HouseApprovalModel house in Model)
+    {
+        <partial name="_HouseApprovePartial" model="@house" />
+    }
+</div>

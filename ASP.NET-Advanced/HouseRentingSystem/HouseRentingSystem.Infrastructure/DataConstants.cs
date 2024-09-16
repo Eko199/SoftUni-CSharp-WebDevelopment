@@ -36,4 +36,9 @@ public static class DataConstants
         public const int LastNameMinLength = 3;
         public const int LastNameMaxLength = 15;
     }
+
+    public static class Claim
+    {
+        public const string FullNameClaim = "user:fullname";
+    }
 }

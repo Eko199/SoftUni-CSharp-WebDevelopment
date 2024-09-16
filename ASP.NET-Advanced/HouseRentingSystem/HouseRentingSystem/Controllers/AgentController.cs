@@ -1,21 +1,15 @@
 ﻿namespace HouseRentingSystem.Controllers;
 
 using System.Security.Claims;
-using Attributes;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Attributes;
+using static Common.MessageConstants;
 using Core.Models.Agent;
 using Core.Services.Contracts.Agent;
+using Core.Services.Contracts.ApplicationUser;
 
-public class AgentController : BaseController
+public class AgentController(IAgentService agentService, IApplicationUserService userService) : BaseController
 {
-    private readonly IAgentService agentService;
-
-    public AgentController(IAgentService agentService)
-    {
-        this.agentService = agentService;
-    }
-
     [HttpGet]
     [NotAnAgent]
     public IActionResult Become() => View(new BecomeAgentFormModel());
@@ -26,12 +20,12 @@ public class AgentController : BaseController
     {
         var userId = User.Id()!;
 
-        if (await agentService.UserWithPhoneNumberExistsAsync(agent.PhoneNumber))
+        if (await agentService.AgentWithPhoneNumberExistsAsync(agent.PhoneNumber))
         {
             ModelState.AddModelError(nameof(agent.PhoneNumber), "Phone number already exists. Enter another one.");
         }
 
-        if (await agentService.UserHasRentsAsync(userId))
+        if (await userService.UserHasRentsAsync(userId))
         {
             ModelState.AddModelError("Error", "You should have no rents to become ana agent!");
         }
@@ -42,6 +36,8 @@ public class AgentController : BaseController
         }
 
         await agentService.CreateAsync(userId, agent);
+        TempData[SuccessMessage] = "You have successfully become an agent";
+
         return RedirectToAction(nameof(HouseController.All), "House");
     }
 }

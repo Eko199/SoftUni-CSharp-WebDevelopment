@@ -14,6 +14,7 @@ public class HouseService(IRepository data, IApplicationUserService userService,
 {
     public async Task<IEnumerable<HouseIndexServiceModel>> GetLastThreeHousesAsync()
         => await data.All<House>()
+            .Where(h => h.IsApproved)
             .OrderByDescending(h => h.Id)
             .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .Take(3)
@@ -30,7 +31,7 @@ public class HouseService(IRepository data, IApplicationUserService userService,
     public async Task<bool> CategoryExistsAsync(int id)
         => await data.All<Category>().AnyAsync(c => c.Id == id);
 
-    public async Task<int> Create(HouseFormModel model, int agentId)
+    public async Task<int> CreateAsync(HouseFormModel model, int agentId)
     {
         var house = new House
         {
@@ -39,6 +40,7 @@ public class HouseService(IRepository data, IApplicationUserService userService,
             Description = model.Description,
             ImageUrl = model.ImageUrl,
             PricePerMonth = model.PricePerMonth,
+            IsApproved = false,
             CategoryId = model.CategoryId,
             AgentId = agentId
         };
@@ -51,7 +53,7 @@ public class HouseService(IRepository data, IApplicationUserService userService,
 
     public async Task<AllHousesQueryModel> GetAllAsync(AllHousesQueryModel model)
     {
-        IQueryable<House> query = data.All<House>();
+        IQueryable<House> query = data.All<House>().Where(h => h.IsApproved);
 
         if (!string.IsNullOrWhiteSpace(model.Category))
         {
@@ -86,14 +88,14 @@ public class HouseService(IRepository data, IApplicationUserService userService,
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByAgentIdAsync(int agentId)
         => await data
             .All<House>()
-            .Where(h => h.AgentId == agentId)
+            .Where(h => h.IsApproved && h.AgentId == agentId)
             .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
     public async Task<IEnumerable<HouseServiceModel>> GetAllHousesByUserIdAsync(string userId)
         => await data
             .All<House>()
-            .Where(h => h.RenterId == userId)
+            .Where(h => h.IsApproved && h.RenterId == userId)
             .ProjectTo<HouseServiceModel>(mapper.ConfigurationProvider)
             .ToListAsync();
 
@@ -123,7 +125,7 @@ public class HouseService(IRepository data, IApplicationUserService userService,
         var categories = await GetAllCategoriesAsync();
 
         return await data.All<House>()
-            .Where(h => h.Id == id)
+            .Where(h => h.Id == id && h.IsApproved)
             .Select(h => new HouseFormModel
             {
                 Title = h.Title,
@@ -199,5 +201,32 @@ public class HouseService(IRepository data, IApplicationUserService userService,
         var house = await data.FindAsync<House>(houseId) ?? throw new ArgumentException("Invalid house id!");
         house.RenterId = null;
         await data.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<HouseApprovalModel>> GetAllForApprovalAsync()
+        => await data.All<House>()
+            .Where(h => !h.IsApproved)
+            .Select(h => new HouseApprovalModel
+            {
+                Id = h.Id,
+                Title = h.Title,
+                Address = h.Address,
+                Category = h.Category.Name,
+                ImageUrl = h.ImageUrl,
+                Description = h.Description,
+                PricePerMonth = h.PricePerMonth,
+                AgentEmail = h.Agent.User.Email!
+            })
+            .ToListAsync();
+
+    public async Task ApproveAsync(int houseId)
+    {
+        var house = await data.FindAsync<House>(houseId) ?? throw new ArgumentException("Invalid house id!");
+
+        if (!house.IsApproved)
+        {
+            house.IsApproved = true;
+            await data.SaveChangesAsync();
+        }
     }
 }

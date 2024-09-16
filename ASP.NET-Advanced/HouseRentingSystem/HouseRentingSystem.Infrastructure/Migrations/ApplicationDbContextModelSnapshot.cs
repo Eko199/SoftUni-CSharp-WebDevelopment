@@ -44,7 +44,8 @@ namespace HouseRentingSystem.Data.Migrations
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Agents");
 
@@ -142,7 +143,7 @@ namespace HouseRentingSystem.Data.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ee725f50-7025-4c0a-b458-62ecc17b680c",
+                            ConcurrencyStamp = "59765573-a712-4dbf-8575-5fd249f53c1e",
                             Email = "agent@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Linda",
@@ -150,9 +151,9 @@ namespace HouseRentingSystem.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "agent@mail.com",
                             NormalizedUserName = "agent@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMeWr8tZWIHP1SzzZuQVSaWa8fZuesm1WlzNSRtje+n7nH5yF11FVaX+TmUGtgd+yQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEH2Cgci9rfpZHcLd0GZZtRhEIEIb1Ye0cgDq3MjkwuFf+/2jnxaS3YRlljigv40o0A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "937d7176-6b33-47e4-b7a9-47c007d6798d",
+                            SecurityStamp = "43660da6-0223-479d-b004-6991755df798",
                             TwoFactorEnabled = false,
                             UserName = "agent@mail.com"
                         },
@@ -160,7 +161,7 @@ namespace HouseRentingSystem.Data.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a2f72496-a0f5-4f28-a8d7-0b0039c2a373",
+                            ConcurrencyStamp = "b61d72d9-b91c-4640-bb6f-6e240bb7c620",
                             Email = "guest@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Teodor",
@@ -168,9 +169,9 @@ namespace HouseRentingSystem.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "guest@mail.com",
                             NormalizedUserName = "guest@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAELYLd8jDzXEvU6Db+/60g9a7kHdqxwOjgmHM3ZtjdNllEwSiqQeuAhvcn6bxVkKNFw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHeIopz0l30t339EdhyOuCDLCKGC7EGrPsBKSqDpNS2LHE9gTVh34k2xQQ6SHQkbww==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "41d9e886-1990-4a73-8d9b-91d5856325d1",
+                            SecurityStamp = "bcc2abcd-ca63-45b2-94c9-501e78b606cb",
                             TwoFactorEnabled = false,
                             UserName = "guest@mail.com"
                         },
@@ -178,7 +179,7 @@ namespace HouseRentingSystem.Data.Migrations
                         {
                             Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9b25d146-231c-4ae6-8537-750ace63abe9",
+                            ConcurrencyStamp = "dfefba62-a0d4-48e3-9b01-921bfd94075d",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -186,9 +187,9 @@ namespace HouseRentingSystem.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH4LDzJ1Z8UAKHglNoUxHKHLSWmVAd3tpBypOgQnaEMy2zhpj0K50p1FppprFRbiiw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHWGj+X/noid1BsGQ+OzIKr5LoYo3RdPDQj7wKdHmMEaGJrqOqBQHivKJWXFoku5tw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "02a93438-d093-4482-bc20-b557ba6c888d",
+                            SecurityStamp = "2415d996-4981-4eba-8b33-ed0489cc8999",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -257,11 +258,14 @@ namespace HouseRentingSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("PricePerMonth")
                         .HasColumnType("decimal(6,2)");
 
                     b.Property<string>("RenterId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -274,6 +278,8 @@ namespace HouseRentingSystem.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("RenterId");
+
                     b.ToTable("Houses");
 
                     b.HasData(
@@ -285,6 +291,7 @@ namespace HouseRentingSystem.Data.Migrations
                             CategoryId = 3,
                             Description = "A big house for your whole family. Don't miss to buy a house with three bedrooms.",
                             ImageUrl = "https://www.luxury-architecture.net/wp-content/uploads/2017/12/1513217889-7597-FAIRWAYS-010.jpg",
+                            IsApproved = true,
                             PricePerMonth = 2100.00m,
                             RenterId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             Title = "Big House Marina"
@@ -297,6 +304,7 @@ namespace HouseRentingSystem.Data.Migrations
                             CategoryId = 2,
                             Description = "It has the best comfort you will ever ask for. With two bedrooms, it is great for your family.",
                             ImageUrl = "https://cf.bstatic.com/xdata/images/hotel/max1024x768/179489660.jpg?k=2029f6d9589b49c95dcc9503a265e292c2cdfcb5277487a0050397c3f8dd545a&o=&hp=1",
+                            IsApproved = true,
                             PricePerMonth = 1200.00m,
                             Title = "Family House Comfort"
                         },
@@ -308,6 +316,7 @@ namespace HouseRentingSystem.Data.Migrations
                             CategoryId = 2,
                             Description = "This luxurious house is everything you will need. It is just excellent.",
                             ImageUrl = "https://i.pinimg.com/originals/a6/f5/85/a6f5850a77633c56e4e4ac4f867e3c00.jpg",
+                            IsApproved = true,
                             PricePerMonth = 2000.00m,
                             Title = "Grand House"
                         });
@@ -388,6 +397,29 @@ namespace HouseRentingSystem.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "user:fullname",
+                            ClaimValue = "Linda Michaels",
+                            UserId = "dea12856-c198-4129-b3f3-b893d8395082"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClaimType = "user:fullname",
+                            ClaimValue = "Teodor Lesly",
+                            UserId = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClaimType = "user:fullname",
+                            ClaimValue = "Great Admin",
+                            UserId = "bcb4f072-ecca-43c9-ab26-c060c6f364e4"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -453,8 +485,8 @@ namespace HouseRentingSystem.Data.Migrations
             modelBuilder.Entity("HouseRentingSystem.Infrastructure.Models.Agent", b =>
                 {
                     b.HasOne("HouseRentingSystem.Infrastructure.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .WithOne("Agent")
+                        .HasForeignKey("HouseRentingSystem.Infrastructure.Models.Agent", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -475,9 +507,15 @@ namespace HouseRentingSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("HouseRentingSystem.Infrastructure.Models.ApplicationUser", "Renter")
+                        .WithMany()
+                        .HasForeignKey("RenterId");
+
                     b.Navigation("Agent");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Renter");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -529,6 +567,11 @@ namespace HouseRentingSystem.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HouseRentingSystem.Infrastructure.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("HouseRentingSystem.Infrastructure.Models.Category", b =>

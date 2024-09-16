@@ -10,9 +10,7 @@ public class AgentService(IRepository data) : IAgentService
 {
     public async Task<bool> ExistsByIdAsync(string userId) => await data.All<Agent>().AnyAsync(a => a.UserId == userId);
 
-    public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber) => await data.All<Agent>().AnyAsync(a => a.PhoneNumber == phoneNumber);
-
-    public async Task<bool> UserHasRentsAsync(string userId) => await data.All<House>().AnyAsync(h => h.RenterId == userId);
+    public async Task<bool> AgentWithPhoneNumberExistsAsync(string phoneNumber) => await data.All<Agent>().AnyAsync(a => a.PhoneNumber == phoneNumber);
 
     public async Task CreateAsync(string userId, BecomeAgentFormModel formModel)
     {

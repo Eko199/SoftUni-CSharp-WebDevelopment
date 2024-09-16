@@ -1,6 +1,6 @@
 ﻿namespace System.Security.Claims;
 
-using static HouseRentingSystem.Common.Constants;
+using static HouseRentingSystem.Areas.Admin.AdminConstants;
 
 public static class ClaimsPrincipalExtensions
 {

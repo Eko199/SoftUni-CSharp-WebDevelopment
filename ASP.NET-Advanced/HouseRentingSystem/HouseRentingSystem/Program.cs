@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -39,11 +40,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "Areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
+
+app.MapControllerRoute(
     name: "House Details",
     pattern: "/House/Details/{id}/{information}",
     defaults: new { Controller = "House", Action = "Details" });
 
 app.MapDefaultControllerRoute();
+
 app.MapRazorPages();
 
 await app.SeedAdminAsync();

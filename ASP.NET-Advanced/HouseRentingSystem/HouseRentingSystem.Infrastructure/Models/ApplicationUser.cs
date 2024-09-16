@@ -13,4 +13,6 @@ public class ApplicationUser : IdentityUser
     [Required]
     [MaxLength(LastNameMaxLength)]
     public string LastName { get; set; } = string.Empty;
+
+    public Agent? Agent { get; set; }
 }

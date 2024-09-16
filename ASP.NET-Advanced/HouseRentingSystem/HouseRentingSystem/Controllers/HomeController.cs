@@ -1,7 +1,7 @@
 namespace HouseRentingSystem.Controllers;
 
-using Core.Services.Contracts.House;
 using Microsoft.AspNetCore.Mvc;
+using Core.Services.Contracts.House;
 
 public class HomeController(IHouseService houseService) : Controller
 {

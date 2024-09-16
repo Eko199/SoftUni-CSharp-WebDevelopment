@@ -1,7 +1,7 @@
 ﻿namespace Microsoft.AspNetCore.Builder;
 
 using Identity;
-using static HouseRentingSystem.Common.Constants;
+using static HouseRentingSystem.Areas.Admin.AdminConstants;
 using HouseRentingSystem.Infrastructure.Models;
 using HouseRentingSystem.Infrastructure.SeedDb;
 
